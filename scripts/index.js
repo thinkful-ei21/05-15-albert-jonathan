@@ -225,15 +225,13 @@ const fetchVideos = function(searchTerm, callback) {
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
 const decorateResponse = function(response) {
-  const decoratedResponse = response.items.map((item) => {
+  return response.items.map((item) => {
     return {
       id: item.id.videoId,
       title: item.snippet.title,
       thumbnail: item.snippet.thumbnails.default.url
     };
-  }
-  );
-  console.log(decoratedResponse);
+  });
 };
 
 // TASK:
@@ -241,7 +239,12 @@ const decorateResponse = function(response) {
 // 2. Using the object, return an HTML string containing all the expected data
 // TEST IT!
 const generateVideoItemHtml = function(video) {
-
+  return `
+    <li id="${video.id}">
+      <h3>${video.title}</h3>
+      <img src="${video.thumbnail}">
+    </li>
+  `
 };
 
 // TASK:
@@ -249,7 +252,7 @@ const generateVideoItemHtml = function(video) {
 // objects and sets the array as the value held in store.items
 // TEST IT!
 const addVideosToStore = function(videos) {
-
+  store.videos.push(...videos);
 };
 
 // TASK:
@@ -258,7 +261,8 @@ const addVideosToStore = function(videos) {
 // 3. Add your array of DOM elements to the appropriate DOM element
 // TEST IT!
 const render = function() {
-
+  const resultsStrings = store.videos.map(each => generateVideoItemHtml(each));
+  $('.results').html(resultsStrings);
 };
 
 // TASK:
@@ -279,17 +283,16 @@ const handleFormSubmit = function() {
     const query = queryTarget.val();
     // this clears input
     queryTarget.val('');
-
-    fetchVideos(query, decorateResponse);
-    //   decorateResponse(response);
-    //   addVideosToStore();
-    //   render();
+    fetchVideos(query, function(response){
+      addVideosToStore(decorateResponse(response));
+      render();
+    });
   });
 };
 
 // When DOM is ready:
 $(function () {
-  handleFormSubmit();
   // TASK:
   // 1. Run `handleFormSubmit` to bind the event listener to the DOM
+  handleFormSubmit();
 });
