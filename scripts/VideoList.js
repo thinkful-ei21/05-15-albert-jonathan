@@ -1,7 +1,7 @@
 'use strict';
 /* eslint-env jquery */
 // eslint-disable-next-line no-unused-vars
-/* gobal store, api*/
+/* global store, api*/
 
 const VideoList = (function(){
   const generateVideoItemHtml = function(video) {
@@ -18,16 +18,6 @@ const VideoList = (function(){
     $('.results').html(resultsStrings);
   };
 
-  const decorateResponse = function(response) {
-    return response.items.map((item) => {
-      return {
-        id: item.id.videoId,
-        title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.default.url
-      };
-    });
-  };
-
   const handleFormSubmit = function() {
     $('.js-search-form').submit(function(event) {
       event.preventDefault();
@@ -36,7 +26,7 @@ const VideoList = (function(){
       // this clears input
       queryTarget.val('');
       api.fetchVideos(query, function(response){
-        store.addVideosToStore(decorateResponse(response));
+        store.addVideosToStore(response);
         render();
       });
     });

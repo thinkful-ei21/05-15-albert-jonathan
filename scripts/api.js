@@ -7,6 +7,16 @@ const api = (function(){
 
   const API_KEY = 'AIzaSyAK3kfLuqg1vTbficJyZkmmTqx574YhXEI';
 
+  const decorateResponse = function(response) {
+    return response.items.map((item) => {
+      return {
+        id: item.id.videoId,
+        title: item.snippet.title,
+        thumbnail: item.snippet.thumbnails.default.url
+      };
+    });
+  };
+
   const fetchVideos = function(searchTerm, callback) {
     const query = {
       part: 'snippet',
@@ -14,11 +24,13 @@ const api = (function(){
       q: searchTerm
     };
   
-    $.getJSON(BASE_URL, query, callback);
+    $.getJSON(BASE_URL, query, function(response) {
+      callback(decorateResponse(response));
+    });
   };
 
   return {
-    fetchVideos
+    fetchVideos,
   };
 
 }());

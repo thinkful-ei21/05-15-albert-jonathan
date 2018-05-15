@@ -1,6 +1,6 @@
 'use strict';
 /* eslint-env jquery */
-/* gobal VideoList, store, api*/
+/* global VideoList, store, api*/
 
 const mockData = {
   'kind': 'youtube#searchListResponse',
